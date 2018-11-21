@@ -5,6 +5,7 @@ import Obstacles.TrafficLight;
 import Vehicle.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,7 @@ public class TrafficSimMain extends ApplicationAdapter {
     @Override
     public void create() {
         backgroundImage = new Texture("intersection.png");
+
         vehicleList = new ArrayList<Vehicle>();
         obstacleList = new ArrayList<Obstacle>();
 
@@ -50,12 +52,23 @@ public class TrafficSimMain extends ApplicationAdapter {
         for (Vehicle v : vehicleList) {
             v.draw(batch);
         }
-
+        // Draw obstacles
         for (Obstacle o : obstacleList) {
             o.draw(batch);
         }
 
         batch.end();
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
+            // your actions
+            CreateVehicle();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
+            // your actions
+            TrafficLight trafficLight = (TrafficLight) obstacleList.get(0);
+            trafficLight.ControlLight(!trafficLight.IsPassable());
+        }
     }
 
     @Override
@@ -74,7 +87,8 @@ public class TrafficSimMain extends ApplicationAdapter {
 
                         while (iter.hasNext()) {
                             Vehicle v = iter.next();
-                            if (v.LocationUpdateTick()) {
+                            //
+                            if (v.LocationUpdateTick(obstacleList, vehicleList)) {
                                 iter.remove();
                                 Gdx.app.postRunnable(new Runnable() {
                                     @Override
@@ -95,11 +109,20 @@ public class TrafficSimMain extends ApplicationAdapter {
     // todo Add a way to determine which lane
     private void CreateVehicle() {
         Car car = new Car(475, 0, false);
-        vehicleList.add(car);
+        boolean isOverlapping = false;
+        for (Vehicle v : vehicleList) {
+            if (car.getBoundingRectangle().overlaps(v.getBoundingRectangle())) {
+                isOverlapping = true;
+            }
+        }
+
+        if (!isOverlapping) {
+            vehicleList.add(car);
+        }
     }
 
     private void CreateObstacles() {
-        TrafficLight trafficLight1 = new TrafficLight(465, 372, false);
+        TrafficLight trafficLight1 = new TrafficLight(465, 372, true);
         obstacleList.add(trafficLight1);
     }
 }

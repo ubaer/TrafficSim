@@ -27,4 +27,9 @@ public class TrafficLight extends Obstacle {
             setColor(Color.RED);
         }
     }
+
+    @Override
+    public boolean IsPassable() {
+        return greenLightOn;
+    }
 }
