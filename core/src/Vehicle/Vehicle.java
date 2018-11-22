@@ -15,16 +15,26 @@ public abstract class Vehicle extends Sprite {
     boolean horizontal;
     boolean movingForward;
     int startposition;
+    Direction direction;
+    float turningPointX;
+    float turningPointY;
 
-    Vehicle(int length, int maxSpeed) {
+    Vehicle(int length, int maxSpeed, Direction direction) {
         this.length = length;
         this.maxSpeed = maxSpeed;
         this.previousX = locationX;
         this.previousY = locationY;
+        this.direction = direction;
+        turningPointX = -1;
+        turningPointY = -1;
     }
 
     public int GetStartingPosition() {
         return startposition;
+    }
+
+    public Direction GetDirection() {
+        return direction;
     }
 
     // Return false if the vehicle is of screen

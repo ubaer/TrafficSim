@@ -12,51 +12,73 @@ import static com.ai.trafficsim.TrafficSimMain.screenWidth;
 
 public class Car extends Vehicle {
 
-    public Car(int startPosition) {
-        super(2, 2);
+    public Car(int startPosition, Direction direction) {
+        super(2, 2, direction);
         set(new Sprite(new Texture("car.png")));
         SetStartPosition(startPosition);
-
+        setX(locationX);
+        setY(locationY);
         setColor(Color.BLUE);
     }
 
     private void SetStartPosition(int startPosition) {
         this.startposition = startPosition;
-        switch(startPosition){
+        switch (startPosition) {
             case 1:
                 locationX = 0;
-                locationY = 400;
-                setX(locationX);
-                setY(locationY);
+                locationY = 407;
                 movingForward = true;
                 horizontal = true;
                 this.rotate(270);
+                // Set when the car has to turn
+                if (direction == Direction.right) {
+                    locationY -= 34;
+                    turningPointX = 397;
+                }
+                if (direction == Direction.left) {
+                    turningPointX = 473;
+                }
                 break;
             case 2:
-                locationX = 475;
+                locationX = 471;
                 locationY = 0;
-                setX(locationX);
-                setY(locationY);
                 movingForward = true;
                 horizontal = false;
+                if (direction == Direction.right) {
+                    locationX += 32;
+                    turningPointY = 373;
+                }
+                if (direction == Direction.left) {
+                    turningPointY = 455;
+                }
                 break;
             case 3:
                 locationX = 900;
-                locationY = 475;
-                setX(locationX);
-                setY(locationY);
+                locationY = 450;
                 movingForward = false;
                 horizontal = true;
                 this.rotate(90);
+                if (direction == Direction.right) {
+                    locationY += 35;
+                    turningPointX = 500;
+                }
+                if (direction == Direction.left) {
+                    turningPointX = 425;
+                }
                 break;
             case 4:
-                locationX = 400;
+                locationX = 428;
                 locationY = 900;
-                setX(locationX);
-                setY(locationY);
                 movingForward = false;
                 horizontal = false;
                 this.rotate(180);
+                if (direction == Direction.right) {
+                    locationX -= 38;
+                    turningPointY = 483;
+                }
+                if (direction == Direction.left) {
+                    turningPointY = 405;
+                }
                 break;
         }
     }
@@ -67,6 +89,11 @@ public class Car extends Vehicle {
         previousX = locationX;
         previousY = locationY;
 
+        if (turningPointY > 0 || turningPointX > 0) {
+            if ((turningPointY > (locationY - 5) && turningPointY < (locationY + 5)) || (turningPointX > (locationX - 5) && turningPointX < (locationX + 5))) {
+                MakeTurn();
+            }
+        }
         if (horizontal) {
             if (movingForward) {
                 locationX = locationX + maxSpeed;
@@ -108,5 +135,52 @@ public class Car extends Vehicle {
             setY(locationY);
         }
         return locationY > screenHeight || locationY < 0 || locationX > screenWidth || locationX < 0;
+    }
+
+    private void MakeTurn() {
+        switch (startposition) {
+            case 1:
+                if (direction == Direction.left) {
+                    horizontal = false;
+                    rotate(90);
+                } else if (direction == Direction.right) {
+                    horizontal = false;
+                    movingForward = false;
+                    rotate(270);
+                }
+                break;
+            case 2:
+                if (direction == Direction.left) {
+                    horizontal = true;
+                    movingForward = false;
+                    rotate(270);
+                } else if (direction == Direction.right) {
+                    horizontal = true;
+                    rotate(90);
+                }
+                break;
+            case 3:
+                if (direction == Direction.left) {
+                    horizontal = false;
+                    rotate(90);
+                } else if (direction == Direction.right) {
+                    horizontal = false;
+                    movingForward = true;
+                    rotate(270);
+                }
+                break;
+            case 4:
+                if (direction == Direction.left) {
+                    horizontal = true;
+                    movingForward = true;
+                    rotate(90);
+                } else if (direction == Direction.right) {
+                    horizontal = true;
+                    rotate(270);
+                }
+                break;
+        }
+        turningPointY = -1;
+        turningPointX = -1;
     }
 }

@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class TrafficLight extends Obstacle {
-    float locationX;
-    float locationY;
-    boolean greenLightOn;
-    int position;
+    private float locationX;
+    private float locationY;
+    private boolean greenLightOn;
+    private int position;
 
     public TrafficLight(int position, boolean greenLightOn) {
         set(new Sprite(new Texture("trafficLight.png")));
@@ -18,7 +18,7 @@ public class TrafficLight extends Obstacle {
     }
 
     @Override
-    public int GetPosition(){
+    public int GetPosition() {
         return position;
     }
 
@@ -27,21 +27,39 @@ public class TrafficLight extends Obstacle {
 
         switch (position) {
             case 1:
-                this.locationX = 351;
-                this.locationY = 409;
+                this.locationX = 368;
+                this.locationY = 426;
                 this.rotate(90);
                 break;
             case 2:
-                this.locationX = 465;
+                this.locationX = 464;
                 this.locationY = 372;
                 break;
             case 3:
-                this.locationX = 502;
-                this.locationY = 487;
+                this.locationX = 519;
+                this.locationY = 505;
                 this.rotate(90);
                 break;
             case 4:
-                this.locationX = 388;
+                this.locationX = 386;
+                this.locationY = 523;
+                break;
+            case 5:
+                this.locationX = 368;
+                this.locationY = 390;
+                this.rotate(90);
+                break;
+            case 6:
+                this.locationX = 501;
+                this.locationY = 372;
+                break;
+            case 7:
+                this.locationX = 519;
+                this.locationY = 468;
+                this.rotate(90);
+                break;
+            case 8:
+                this.locationX = 423;
                 this.locationY = 523;
                 break;
         }

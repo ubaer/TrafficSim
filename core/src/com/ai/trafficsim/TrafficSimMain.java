@@ -28,15 +28,15 @@ public class TrafficSimMain extends ApplicationAdapter {
     public void create() {
         backgroundImage = new Texture("intersection.png");
 
-        vehicleList = new ArrayList<Vehicle>();
-        obstacleList = new ArrayList<Obstacle>();
+        vehicleList = new ArrayList<>();
+        obstacleList = new ArrayList<>();
 
         batch = new SpriteBatch();
 
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
-        CreateVehicle(2);
+        CreateVehicle(4, Direction.straight);
         CreateObstacles();
     }
 
@@ -49,8 +49,17 @@ public class TrafficSimMain extends ApplicationAdapter {
         // Draw the background image
         batch.draw(backgroundImage, 0, 0);
         // Draw the vehicles
-        for (Vehicle v : vehicleList) {
-            v.draw(batch);
+
+        /* todo This sometimes crashed the program and has to do something with the vehiclelist being modified while drawing.
+           todo Could maybe be fixed by copying the list before drawing the vehicles but then you might draw vehicles that don't exist anymore
+        */
+        try {
+            for (Vehicle v : vehicleList) {
+                v.draw(batch);
+            }
+        } catch (Exception e) {
+            System.out.println("Yikes");
+            // Pokemon exception to avoid program crash
         }
         // Draw obstacles
         for (Obstacle o : obstacleList) {
@@ -60,40 +69,79 @@ public class TrafficSimMain extends ApplicationAdapter {
         batch.end();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
-            // your actions
-            CreateVehicle(1);
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                CreateVehicle(1, Direction.left);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(1, Direction.right);
+            } else {
+                CreateVehicle(1, Direction.straight);
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
-            // your actions
-            CreateVehicle(2);
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                CreateVehicle(2, Direction.left);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(2, Direction.right);
+            } else {
+                CreateVehicle(2, Direction.straight);
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
-            // your actions
-            CreateVehicle(3);
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                CreateVehicle(3, Direction.left);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(3, Direction.right);
+            } else {
+                CreateVehicle(3, Direction.straight);
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
-            // your actions
-            CreateVehicle(4);
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                CreateVehicle(4, Direction.left);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(4, Direction.right);
+            } else {
+                CreateVehicle(4, Direction.straight);
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
-            // your actions
-            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 1).findFirst().get();
-            trafficLight.ControlLight(!trafficLight.IsPassable());
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 5).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 1).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
-            // your actions
-            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
-            trafficLight.ControlLight(!trafficLight.IsPassable());
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 6).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F7)) {
-            // your actions
-            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
-            trafficLight.ControlLight(!trafficLight.IsPassable());
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 7).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F8)) {
-            // your actions
-            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
-            trafficLight.ControlLight(!trafficLight.IsPassable());
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 8).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
+            vehicleList = new ArrayList<>();
         }
     }
 
@@ -103,38 +151,35 @@ public class TrafficSimMain extends ApplicationAdapter {
     }
 
     private Runnable MovementThreadControl() {
-        return new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    while (true) {
-                        Thread.sleep(10);
-                        Iterator<Vehicle> iter = vehicleList.iterator();
+        return () -> {
+            try {
+                while (true) {
+                    Thread.sleep(10);
+                    Iterator<Vehicle> iter = vehicleList.iterator();
 
-                        while (iter.hasNext()) {
-                            final Vehicle v = iter.next();
-                            //
-                            if (v.LocationUpdateTick(obstacleList, vehicleList)) {
-                                iter.remove();
-                                Gdx.app.postRunnable(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        CreateVehicle(v.GetStartingPosition());
-                                    }
-                                });
-                            }
+                    while (iter.hasNext()) {
+                        final Vehicle v = iter.next();
+
+                        List<Vehicle> copyVehicleList = new ArrayList<>(vehicleList);
+                        if (v.LocationUpdateTick(obstacleList, copyVehicleList)) {
+                            iter.remove();
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    CreateVehicle(v.GetStartingPosition(), v.GetDirection());
+                                }
+                            });
                         }
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         };
     }
 
-    // todo Add a way to determine which lane
-    private void CreateVehicle(int startPosition) {
-        Car car = new Car(startPosition);
+    private void CreateVehicle(int startPosition, Direction direction) {
+        Car car = new Car(startPosition, direction);
 
         boolean isOverlapping = false;
         for (Vehicle v : vehicleList) {
@@ -151,7 +196,7 @@ public class TrafficSimMain extends ApplicationAdapter {
     private void CreateObstacles() {
         TrafficLight trafficLight;
 
-        for(int i = 1; i < 5; i ++){
+        for (int i = 1; i < 9; i++) {
             trafficLight = new TrafficLight(i, false);
             obstacleList.add(trafficLight);
         }
