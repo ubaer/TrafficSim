@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 import java.util.List;
 
-public abstract class Vehicle extends Sprite{
+public abstract class Vehicle extends Sprite {
     int length;
     int maxSpeed;
     float locationX;
@@ -13,15 +13,18 @@ public abstract class Vehicle extends Sprite{
     float previousX;
     float previousY;
     boolean horizontal;
+    boolean movingForward;
+    int startposition;
 
-    Vehicle(int length, int maxSpeed, float locationX, float locationY, boolean horizontal) {
+    Vehicle(int length, int maxSpeed) {
         this.length = length;
         this.maxSpeed = maxSpeed;
-        this.locationX = locationX;
-        this.locationY = locationY;
         this.previousX = locationX;
         this.previousY = locationY;
-        this.horizontal = horizontal;
+    }
+
+    public int GetStartingPosition() {
+        return startposition;
     }
 
     // Return false if the vehicle is of screen

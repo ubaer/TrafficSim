@@ -8,22 +8,52 @@ public class TrafficLight extends Obstacle {
     float locationX;
     float locationY;
     boolean greenLightOn;
+    int position;
 
-    public TrafficLight(float locationX, float locationY, boolean greenLightOn){
+    public TrafficLight(int position, boolean greenLightOn) {
         set(new Sprite(new Texture("trafficLight.png")));
-        this.locationX = locationX;
-        this.locationY = locationY;
-        setX(locationX);
-        setY(locationY);
+        SetPosition(position);
+
         ControlLight(greenLightOn);
     }
 
-    public void ControlLight(boolean greenLightOn){
-        this.greenLightOn = greenLightOn;
-        if(greenLightOn){
-            setColor(Color.GREEN);
+    @Override
+    public int GetPosition(){
+        return position;
+    }
+
+    private void SetPosition(int position) {
+        this.position = position;
+
+        switch (position) {
+            case 1:
+                this.locationX = 351;
+                this.locationY = 409;
+                this.rotate(90);
+                break;
+            case 2:
+                this.locationX = 465;
+                this.locationY = 372;
+                break;
+            case 3:
+                this.locationX = 502;
+                this.locationY = 487;
+                this.rotate(90);
+                break;
+            case 4:
+                this.locationX = 388;
+                this.locationY = 523;
+                break;
         }
-        else {
+        setX(locationX);
+        setY(locationY);
+    }
+
+    public void ControlLight(boolean greenLightOn) {
+        this.greenLightOn = greenLightOn;
+        if (greenLightOn) {
+            setColor(Color.GREEN);
+        } else {
             setColor(Color.RED);
         }
     }

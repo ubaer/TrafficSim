@@ -12,26 +12,77 @@ import static com.ai.trafficsim.TrafficSimMain.screenWidth;
 
 public class Car extends Vehicle {
 
-    public Car(float startX, float startY, boolean horizontal) {
-        super(2, 2, startX, startY, horizontal);
+    public Car(int startPosition) {
+        super(2, 2);
         set(new Sprite(new Texture("car.png")));
-        setX(startX);
-        setY(startY);
+        SetStartPosition(startPosition);
+
         setColor(Color.BLUE);
+    }
+
+    private void SetStartPosition(int startPosition) {
+        this.startposition = startPosition;
+        switch(startPosition){
+            case 1:
+                locationX = 0;
+                locationY = 400;
+                setX(locationX);
+                setY(locationY);
+                movingForward = true;
+                horizontal = true;
+                this.rotate(270);
+                break;
+            case 2:
+                locationX = 475;
+                locationY = 0;
+                setX(locationX);
+                setY(locationY);
+                movingForward = true;
+                horizontal = false;
+                break;
+            case 3:
+                locationX = 900;
+                locationY = 475;
+                setX(locationX);
+                setY(locationY);
+                movingForward = false;
+                horizontal = true;
+                this.rotate(90);
+                break;
+            case 4:
+                locationX = 400;
+                locationY = 900;
+                setX(locationX);
+                setY(locationY);
+                movingForward = false;
+                horizontal = false;
+                this.rotate(180);
+                break;
+        }
     }
 
     @Override
     public boolean LocationUpdateTick(List<Obstacle> obstacleList, List<Vehicle> vehicleList) {
         boolean isOverlapping = false;
+        previousX = locationX;
+        previousY = locationY;
 
         if (horizontal) {
-            previousX = locationX;
-            locationX = locationX + maxSpeed;
-            setX(locationX);
+            if (movingForward) {
+                locationX = locationX + maxSpeed;
+                setX(locationX);
+            } else {
+                locationX = locationX - maxSpeed;
+                setX(locationX);
+            }
         } else {
-            previousY = locationY;
-            locationY = locationY + maxSpeed;
-            setY(locationY);
+            if (movingForward) {
+                locationY = locationY + maxSpeed;
+                setY(locationY);
+            } else {
+                locationY = locationY - maxSpeed;
+                setY(locationY);
+            }
         }
 
         for (Obstacle o : obstacleList) {

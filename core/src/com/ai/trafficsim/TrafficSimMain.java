@@ -36,7 +36,7 @@ public class TrafficSimMain extends ApplicationAdapter {
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
-        CreateVehicle();
+        CreateVehicle(2);
         CreateObstacles();
     }
 
@@ -61,12 +61,38 @@ public class TrafficSimMain extends ApplicationAdapter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             // your actions
-            CreateVehicle();
+            CreateVehicle(1);
         }
-
         if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
             // your actions
-            TrafficLight trafficLight = (TrafficLight) obstacleList.get(0);
+            CreateVehicle(2);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
+            // your actions
+            CreateVehicle(3);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
+            // your actions
+            CreateVehicle(4);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
+            // your actions
+            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 1).findFirst().get();
+            trafficLight.ControlLight(!trafficLight.IsPassable());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
+            // your actions
+            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
+            trafficLight.ControlLight(!trafficLight.IsPassable());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F7)) {
+            // your actions
+            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
+            trafficLight.ControlLight(!trafficLight.IsPassable());
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F8)) {
+            // your actions
+            TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
             trafficLight.ControlLight(!trafficLight.IsPassable());
         }
     }
@@ -86,14 +112,14 @@ public class TrafficSimMain extends ApplicationAdapter {
                         Iterator<Vehicle> iter = vehicleList.iterator();
 
                         while (iter.hasNext()) {
-                            Vehicle v = iter.next();
+                            final Vehicle v = iter.next();
                             //
                             if (v.LocationUpdateTick(obstacleList, vehicleList)) {
                                 iter.remove();
                                 Gdx.app.postRunnable(new Runnable() {
                                     @Override
                                     public void run() {
-                                        CreateVehicle();
+                                        CreateVehicle(v.GetStartingPosition());
                                     }
                                 });
                             }
@@ -107,8 +133,9 @@ public class TrafficSimMain extends ApplicationAdapter {
     }
 
     // todo Add a way to determine which lane
-    private void CreateVehicle() {
-        Car car = new Car(475, 0, false);
+    private void CreateVehicle(int startPosition) {
+        Car car = new Car(startPosition);
+
         boolean isOverlapping = false;
         for (Vehicle v : vehicleList) {
             if (car.getBoundingRectangle().overlaps(v.getBoundingRectangle())) {
@@ -122,8 +149,12 @@ public class TrafficSimMain extends ApplicationAdapter {
     }
 
     private void CreateObstacles() {
-        TrafficLight trafficLight1 = new TrafficLight(465, 372, true);
-        obstacleList.add(trafficLight1);
+        TrafficLight trafficLight;
+
+        for(int i = 1; i < 5; i ++){
+            trafficLight = new TrafficLight(i, false);
+            obstacleList.add(trafficLight);
+        }
     }
 }
 
