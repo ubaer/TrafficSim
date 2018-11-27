@@ -94,12 +94,13 @@ public abstract class Vehicle extends Sprite {
             locationY = previousY;
             setY(locationY);
         }
-        return locationY > screenHeight + length || locationY < 0 - length || locationX > screenWidth + length|| locationX < 0 - length;
+        return locationY > screenHeight + length || locationY < 0 - length || locationX > screenWidth + length || locationX < 0 - length;
     }
 
-    public VehicleType GetVehicleType(){
+    public VehicleType GetVehicleType() {
         return vehicleType;
     }
+
     private void MakeTurn() {
         switch (startPosition) {
             case 1:
