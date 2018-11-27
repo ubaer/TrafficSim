@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Bus extends Vehicle {
     public Bus(int startPosition) {
-        super(2, 1.5, Direction.straight, VehicleType.Bus);
+        super(120, 1.5, Direction.straight, VehicleType.Bus);
         set(new Sprite(new Texture("bus.png")));
         SetStartPosition(startPosition);
         setX(locationX);
@@ -20,13 +20,13 @@ public class Bus extends Vehicle {
         switch (startPosition) {
             case 1:
                 locationX = 467;
-                locationY = 0;
+                locationY = 0 - length;
                 movingForward = true;
                 horizontal = false;
                 break;
             case 2:
                 locationX = 410;
-                locationY = 900;
+                locationY = 900 + length;
                 movingForward = false;
                 horizontal = false;
                 this.rotate(180);

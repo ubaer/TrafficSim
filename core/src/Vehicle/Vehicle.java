@@ -94,7 +94,7 @@ public abstract class Vehicle extends Sprite {
             locationY = previousY;
             setY(locationY);
         }
-        return locationY > screenHeight || locationY < 0 || locationX > screenWidth || locationX < 0;
+        return locationY > screenHeight + length || locationY < 0 - length || locationX > screenWidth + length|| locationX < 0 - length;
     }
 
     public VehicleType GetVehicleType(){

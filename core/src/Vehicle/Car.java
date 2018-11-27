@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 public class Car extends Vehicle {
 
     public Car(int startPosition, Direction direction) {
-        super(2, 2, direction, VehicleType.Car);
+        super(40, 2, direction, VehicleType.Car);
         set(new Sprite(new Texture("car.png")));
         SetStartPosition(startPosition);
         setX(locationX);
@@ -20,7 +20,7 @@ public class Car extends Vehicle {
         this.startPosition = startPosition;
         switch (startPosition) {
             case 1:
-                locationX = 0;
+                locationX = 0 - length;
                 locationY = 410;
                 movingForward = true;
                 horizontal = true;
@@ -36,7 +36,7 @@ public class Car extends Vehicle {
                 break;
             case 2:
                 locationX = 507;
-                locationY = 0;
+                locationY = 0 - length;
                 movingForward = true;
                 horizontal = false;
                 if (direction == Direction.right) {
@@ -48,7 +48,7 @@ public class Car extends Vehicle {
                 }
                 break;
             case 3:
-                locationX = 900;
+                locationX = 900 + length;
                 locationY = 447;
                 movingForward = false;
                 horizontal = true;
@@ -63,7 +63,7 @@ public class Car extends Vehicle {
                 break;
             case 4:
                 locationX = 368;
-                locationY = 900;
+                locationY = 900 + length;
                 movingForward = false;
                 horizontal = false;
                 this.rotate(180);
