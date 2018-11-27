@@ -26,58 +26,58 @@ public class Car extends Vehicle {
         switch (startPosition) {
             case 1:
                 locationX = 0;
-                locationY = 407;
+                locationY = 410;
                 movingForward = true;
                 horizontal = true;
                 this.rotate(270);
                 // Set when the car has to turn
                 if (direction == Direction.right) {
-                    locationY -= 34;
-                    turningPointX = 397;
+                    locationY -= 38;
+                    turningPointX = 331;
                 }
                 if (direction == Direction.left) {
-                    turningPointX = 473;
+                    turningPointX = 512;
                 }
                 break;
             case 2:
-                locationX = 471;
+                locationX = 507;
                 locationY = 0;
                 movingForward = true;
                 horizontal = false;
                 if (direction == Direction.right) {
-                    locationX += 32;
+                    locationX += 37;
                     turningPointY = 373;
                 }
                 if (direction == Direction.left) {
-                    turningPointY = 455;
+                    turningPointY = 449;
                 }
                 break;
             case 3:
                 locationX = 900;
-                locationY = 450;
+                locationY = 447;
                 movingForward = false;
                 horizontal = true;
                 this.rotate(90);
                 if (direction == Direction.right) {
-                    locationY += 35;
-                    turningPointX = 500;
+                    locationY += 38;
+                    turningPointX = 544;
                 }
                 if (direction == Direction.left) {
-                    turningPointX = 425;
+                    turningPointX = 365;
                 }
                 break;
             case 4:
-                locationX = 428;
+                locationX = 368;
                 locationY = 900;
                 movingForward = false;
                 horizontal = false;
                 this.rotate(180);
                 if (direction == Direction.right) {
-                    locationX -= 38;
+                    locationX -= 42;
                     turningPointY = 483;
                 }
                 if (direction == Direction.left) {
-                    turningPointY = 405;
+                    turningPointY = 408;
                 }
                 break;
         }
