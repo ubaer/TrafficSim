@@ -36,7 +36,8 @@ public class TrafficSimMain extends ApplicationAdapter {
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
-        CreateVehicle(4, Direction.left);
+        CreateVehicle(VehicleType.Car,4, Direction.left);
+        CreateVehicle(VehicleType.Bus,2, null);
         CreateObstacles();
     }
 
@@ -70,38 +71,38 @@ public class TrafficSimMain extends ApplicationAdapter {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.F1)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                CreateVehicle(1, Direction.left);
+                CreateVehicle(VehicleType.Car, 1, Direction.left);
             } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                CreateVehicle(1, Direction.right);
+                CreateVehicle(VehicleType.Car, 1, Direction.right);
             } else {
-                CreateVehicle(1, Direction.straight);
+                CreateVehicle(VehicleType.Car, 1, Direction.straight);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F2)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                CreateVehicle(2, Direction.left);
+                CreateVehicle(VehicleType.Car, 2, Direction.left);
             } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                CreateVehicle(2, Direction.right);
+                CreateVehicle(VehicleType.Car, 2, Direction.right);
             } else {
-                CreateVehicle(2, Direction.straight);
+                CreateVehicle(VehicleType.Car, 2, Direction.straight);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F3)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                CreateVehicle(3, Direction.left);
+                CreateVehicle(VehicleType.Car, 3, Direction.left);
             } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                CreateVehicle(3, Direction.right);
+                CreateVehicle(VehicleType.Car, 3, Direction.right);
             } else {
-                CreateVehicle(3, Direction.straight);
+                CreateVehicle(VehicleType.Car, 3, Direction.straight);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F4)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                CreateVehicle(4, Direction.left);
+                CreateVehicle(VehicleType.Car, 4, Direction.left);
             } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                CreateVehicle(4, Direction.right);
+                CreateVehicle(VehicleType.Car, 4, Direction.right);
             } else {
-                CreateVehicle(4, Direction.straight);
+                CreateVehicle(VehicleType.Car, 4, Direction.straight);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
@@ -140,6 +141,22 @@ public class TrafficSimMain extends ApplicationAdapter {
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 10).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 9).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(VehicleType.Bus, 2, null);
+            } else {
+                CreateVehicle(VehicleType.Bus, 1, null);
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
             vehicleList = new ArrayList<>();
         }
@@ -163,7 +180,7 @@ public class TrafficSimMain extends ApplicationAdapter {
                         List<Vehicle> copyVehicleList = new ArrayList<>(vehicleList);
                         if (v.LocationUpdateTick(obstacleList, copyVehicleList)) {
                             iter.remove();
-                            Gdx.app.postRunnable(() -> CreateVehicle(v.GetStartingPosition(), v.GetDirection()));
+                            Gdx.app.postRunnable(() -> CreateVehicle(v.GetVehicleType(), v.GetStartingPosition(), v.GetDirection()));
                         }
                     }
                 }
@@ -173,26 +190,35 @@ public class TrafficSimMain extends ApplicationAdapter {
         };
     }
 
-    private void CreateVehicle(int startPosition, Direction direction) {
-        Car car = new Car(startPosition, direction);
+    private void CreateVehicle(VehicleType vehicleType, int startingPosition, Direction direction) {
+        Vehicle vehicle = null;
+
+        switch (vehicleType) {
+            case Bus:
+                vehicle = new Bus(startingPosition);
+                break;
+            case Car:
+                vehicle = new Car(startingPosition, direction);
+                break;
+        }
 
         boolean isOverlapping = false;
         for (Vehicle v : vehicleList) {
-            if (car.getBoundingRectangle().overlaps(v.getBoundingRectangle())) {
+            if (vehicle.getBoundingRectangle().overlaps(v.getBoundingRectangle())) {
                 isOverlapping = true;
             }
         }
 
         if (!isOverlapping) {
-            vehicleList.add(car);
+            vehicleList.add(vehicle);
         }
     }
 
     private void CreateObstacles() {
         TrafficLight trafficLight;
 
-        for (int i = 1; i < 9; i++) {
-            trafficLight = new TrafficLight(i, true);
+        for (int i = 1; i < 11; i++) {
+            trafficLight = new TrafficLight(i, false);
             obstacleList.add(trafficLight);
         }
     }
