@@ -26,7 +26,7 @@ public class TrafficSimMain extends ApplicationAdapter {
 
     @Override
     public void create() {
-        backgroundImage = new Texture("intersection.png");
+        backgroundImage = new Texture("intersection2.png");
 
         vehicleList = new ArrayList<>();
         obstacleList = new ArrayList<>();
@@ -36,7 +36,7 @@ public class TrafficSimMain extends ApplicationAdapter {
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
-        CreateVehicle(4, Direction.straight);
+        CreateVehicle(4, Direction.left);
         CreateObstacles();
     }
 
@@ -106,7 +106,7 @@ public class TrafficSimMain extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 5).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             } else {
                 TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 1).findFirst().get();
@@ -115,28 +115,28 @@ public class TrafficSimMain extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 6).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F7)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 6).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 7).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 5).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F8)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 8).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 8).findFirst().get();
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 7).findFirst().get();
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             }
         }
@@ -163,12 +163,7 @@ public class TrafficSimMain extends ApplicationAdapter {
                         List<Vehicle> copyVehicleList = new ArrayList<>(vehicleList);
                         if (v.LocationUpdateTick(obstacleList, copyVehicleList)) {
                             iter.remove();
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    CreateVehicle(v.GetStartingPosition(), v.GetDirection());
-                                }
-                            });
+                            Gdx.app.postRunnable(() -> CreateVehicle(v.GetStartingPosition(), v.GetDirection()));
                         }
                     }
                 }
@@ -197,7 +192,7 @@ public class TrafficSimMain extends ApplicationAdapter {
         TrafficLight trafficLight;
 
         for (int i = 1; i < 9; i++) {
-            trafficLight = new TrafficLight(i, false);
+            trafficLight = new TrafficLight(i, true);
             obstacleList.add(trafficLight);
         }
     }
