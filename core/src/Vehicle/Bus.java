@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
 public class Bus extends Vehicle {
+
     public Bus(int startPosition) {
         super(120, 1.5, Direction.straight, VehicleType.Bus);
         set(new Sprite(new Texture("bus.png")));

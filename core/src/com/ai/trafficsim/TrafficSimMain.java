@@ -36,8 +36,10 @@ public class TrafficSimMain extends ApplicationAdapter {
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
-        CreateVehicle(VehicleType.Car,4, Direction.left);
-        CreateVehicle(VehicleType.Bus,2, null);
+        CreateVehicle(VehicleType.Bicycle, 1, null);
+        CreateVehicle(VehicleType.Bicycle, 2, null);
+        CreateVehicle(VehicleType.Bicycle, 3, null);
+        CreateVehicle(VehicleType.Bicycle, 4, null);
         CreateObstacles();
     }
 
@@ -150,11 +152,31 @@ public class TrafficSimMain extends ApplicationAdapter {
                 trafficLight.ControlLight(!trafficLight.IsPassable());
             }
         }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F10)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 12).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            } else {
+                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 11).findFirst().get();
+                trafficLight.ControlLight(!trafficLight.IsPassable());
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
                 CreateVehicle(VehicleType.Bus, 2, null);
             } else {
                 CreateVehicle(VehicleType.Bus, 1, null);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.F12)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                CreateVehicle(VehicleType.Bicycle, 2, null);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+                CreateVehicle(VehicleType.Bicycle, 4, null);
+            } else if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                CreateVehicle(VehicleType.Bicycle, 3, null);
+            } else {
+                CreateVehicle(VehicleType.Bicycle, 1, null);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.R)) {
@@ -200,6 +222,9 @@ public class TrafficSimMain extends ApplicationAdapter {
             case Car:
                 vehicle = new Car(startingPosition, direction);
                 break;
+            case Bicycle:
+                vehicle = new Bicycle(startingPosition);
+                break;
         }
 
         boolean isOverlapping = false;
@@ -217,7 +242,7 @@ public class TrafficSimMain extends ApplicationAdapter {
     private void CreateObstacles() {
         TrafficLight trafficLight;
 
-        for (int i = 1; i < 11; i++) {
+        for (int i = 1; i < 13; i++) {
             trafficLight = new TrafficLight(i, false);
             obstacleList.add(trafficLight);
         }
