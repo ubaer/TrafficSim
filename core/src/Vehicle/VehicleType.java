@@ -1,5 +1,5 @@
 package Vehicle;
 
 public enum VehicleType {
-    Car, Bus
+    Car, Bus, Bicycle
 }

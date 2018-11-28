@@ -75,6 +75,14 @@ public class TrafficLight extends Obstacle {
                 this.locationX = 405;
                 this.locationY = 540;
                 break;
+            case 11:
+                this.locationX = 601;
+                this.locationY = 332;
+                break;
+            case 12:
+                this.locationX = 263;
+                this.locationY = 568;
+                break;
         }
         setX(locationX);
         setY(locationY);
