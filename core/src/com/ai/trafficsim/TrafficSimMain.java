@@ -37,9 +37,8 @@ public class TrafficSimMain extends ApplicationAdapter {
         Thread movementThread = new Thread(MovementThreadControl());
         movementThread.start();
         CreateVehicle(VehicleType.Bicycle, 1, null);
-        CreateVehicle(VehicleType.Bicycle, 2, null);
-        CreateVehicle(VehicleType.Bicycle, 3, null);
-        CreateVehicle(VehicleType.Bicycle, 4, null);
+        CreateVehicle(VehicleType.Car, 1, null);
+        CreateVehicle(VehicleType.Bus, 1, null);
         CreateObstacles();
     }
 
