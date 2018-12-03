@@ -6,32 +6,57 @@ import Vehicle.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.*;
 
 public class TrafficSimMain extends ApplicationAdapter {
     public static int screenWidth = 900;
     public static int screenHeight = 900;
 
     private SpriteBatch batch;
+    private BitmapFont font;
     private Texture backgroundImage;
 
     private List<Vehicle> vehicleList;
     private List<Obstacle> obstacleList;
 
+    private Statistics statistics;
+    private static TrafficSimMain instance = null;
+
+    private TrafficSimMain() {
+        vehicleList = new ArrayList<>();
+        obstacleList = new ArrayList<>();
+        statistics = new Statistics(vehicleList);
+    }
+
+    public static TrafficSimMain getInstance() {
+        if (instance == null) {
+            instance = new TrafficSimMain();
+        }
+        return instance;
+    }
+
     @Override
     public void create() {
         backgroundImage = new Texture("intersection2.png");
 
-        vehicleList = new ArrayList<>();
-        obstacleList = new ArrayList<>();
 
         batch = new SpriteBatch();
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("rockwell.ttf"));
+        FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+        parameter.size = 13;
+        font = generator.generateFont(parameter);
+        font.setColor(Color.BLACK);
+        generator.dispose();
 
         // To have movement controlled by time instead of refresh rate of the application
         Thread movementThread = new Thread(MovementThreadControl());
@@ -108,56 +133,44 @@ public class TrafficSimMain extends ApplicationAdapter {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F5)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 2).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(2);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 1).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(1);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F6)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 4).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(4);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 3).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(3);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F7)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 6).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(6);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 5).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(5);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F8)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 8).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(8);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 7).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(7);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F9)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 10).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(10);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 9).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(9);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F10)) {
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 12).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(12);
             } else {
-                TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == 11).findFirst().get();
-                trafficLight.ControlLight(!trafficLight.IsPassable());
+                ToggleTrafficLight(11);
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.F11)) {
@@ -183,9 +196,18 @@ public class TrafficSimMain extends ApplicationAdapter {
         }
     }
 
+    public TrafficLight ToggleTrafficLight(int id){
+        TrafficLight trafficLight = (TrafficLight) obstacleList.stream().filter(f -> f.GetPosition() == id).findFirst().get();
+        trafficLight.ControlLight(!trafficLight.IsPassable());
+        return trafficLight;
+    }
+
+
+
     @Override
     public void dispose() {
         batch.dispose();
+        font.dispose();
     }
 
     private Runnable MovementThreadControl() {
@@ -198,8 +220,10 @@ public class TrafficSimMain extends ApplicationAdapter {
                     while (iter.hasNext()) {
                         final Vehicle v = iter.next();
 
-                        List<Vehicle> copyVehicleList = new ArrayList<>(vehicleList);
+//                        List<Vehicle> copyVehicleList = new ArrayList<>(vehicleList);
+                        CopyOnWriteArrayList<Vehicle> copyVehicleList = new CopyOnWriteArrayList<>(vehicleList);
                         if (v.LocationUpdateTick(obstacleList, copyVehicleList)) {
+                            statistics.Despawn(v);
                             iter.remove();
                             Gdx.app.postRunnable(() -> CreateVehicle(v.GetVehicleType(), v.GetStartingPosition(), v.GetDirection()));
                         }
@@ -245,6 +269,10 @@ public class TrafficSimMain extends ApplicationAdapter {
             trafficLight = new TrafficLight(i, false);
             obstacleList.add(trafficLight);
         }
+    }
+
+    public Statistics GetStatistics() {
+        return statistics;
     }
 }
 
