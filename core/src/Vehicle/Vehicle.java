@@ -3,6 +3,8 @@ package Vehicle;
 import Obstacles.Obstacle;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 
 import static com.ai.trafficsim.TrafficSimMain.screenHeight;
@@ -21,6 +23,8 @@ public abstract class Vehicle extends Sprite {
     Direction direction;
     float turningPointX;
     float turningPointY;
+    Instant spawnTime;
+    Instant despawnTime;
     VehicleType vehicleType;
 
     Vehicle(int length, double maxSpeed, Direction direction, VehicleType vehicleType) {
@@ -32,6 +36,7 @@ public abstract class Vehicle extends Sprite {
         this.vehicleType = vehicleType;
         turningPointX = -1;
         turningPointY = -1;
+        spawnTime = Instant.now();
     }
 
     abstract void SetStartPosition(int startPosition);
@@ -40,8 +45,16 @@ public abstract class Vehicle extends Sprite {
         return startPosition;
     }
 
+    public double GetUpTime() {
+        return (double) Duration.between(spawnTime, despawnTime).toMillis()/1000;
+    }
+
     public Direction GetDirection() {
         return direction;
+    }
+
+    public void Despawn(){
+        despawnTime = Instant.now();
     }
 
     public boolean LocationUpdateTick(List<Obstacle> obstacleList, List<Vehicle> vehicleList) {
